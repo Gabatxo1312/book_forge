@@ -1,14 +1,16 @@
 use std::sync::Arc;
 
-use axum::{body::Body, extract::State, http::{Response, StatusCode}, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
+use axum::{body::Body, extract::{Path, State}, http::{Response, StatusCode}, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
 
 use crate::{config::AppConfig, handlers::helpers::render_template, models::{Book, NewBook}, repositories::{book_repository::BookRepository, user_repository::UserRepository, DatabaseConnection}};
 
 pub fn routes() -> Router<Arc<AppConfig>> {
     Router::new()
         .route("/books", get(get_all_books))
-        .route("/books/new", get(new_book))
         .route("/books", post(create_book))
+        .route("/books/new", get(new_book))
+        .route("/books/:id/edit", get(edit_book))
+        .route("/books/:id", post(update_book))
 }
 
 async fn get_all_books(
@@ -47,6 +49,41 @@ async fn create_book(
         .expect("Failed to create Connection.");
     
     match BookRepository::create_book(&mut db, &payload) {
+        Ok(_) => Redirect::to("/").into_response(),
+        Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+    }
+}
+
+async fn edit_book(
+    State(state): State<Arc<AppConfig>>,
+    Path(id): Path<i32>
+) -> Html<String> {
+    let mut db = DatabaseConnection::new(&state.database_url)
+        .expect("Failed to create Connection.");
+    
+    let users = UserRepository::get_all_users(&mut db)
+        .expect("Failed to load users");
+    
+    let book = BookRepository::get_book_by_id(&mut db, id)
+        .expect("Failed to load user");
+
+    let context = minijinja::context! {
+        users => users,
+        book => book
+    };
+
+    render_template(axum::extract::State(state), "books/edit.html", context)
+}
+
+async fn update_book(
+    State(state): State<Arc<AppConfig>>,
+    Path(id): Path<i32>,
+    Form(payload): Form<NewBook>
+) -> Response<Body> {
+    let mut db = DatabaseConnection::new(&state.database_url)
+        .expect("Failed to create Connection.");
+    
+    match BookRepository::update_book(&mut db, id, &payload) {
         Ok(_) => Redirect::to("/").into_response(),
         Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
     }

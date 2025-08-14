@@ -5,14 +5,14 @@ use axum::{extract::State, response::Html, routing::get, Router};
 use crate::{config::AppConfig, handlers::helpers::render_template, repositories::{book_repository::BookRepository, DatabaseConnection}};
 
 pub mod helpers;
-pub mod books;
-pub mod users;
+pub mod books_handler;
+pub mod users_handler;
 
 pub fn create_router(config: Arc<AppConfig>) -> Router {
     Router::new()
         .route("/", get(root))
-        .merge(books::routes())
-        .merge(users::routes())
+        .merge(books_handler::routes())
+        .merge(users_handler::routes())
         .with_state(config)
 }
 

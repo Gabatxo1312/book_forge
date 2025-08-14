@@ -20,7 +20,8 @@ pub struct NewUser {
     pub name: String,
 }
 
-#[derive(Queryable, Selectable, Serialize)]
+#[derive(Debug)]
+#[derive(Queryable, Selectable, Serialize, AsChangeset)]
 #[diesel(table_name = crate::schema::books)]
 #[diesel(belongs_to(User))]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
@@ -31,7 +32,7 @@ pub struct Book{
     pub current_holder_id: Option<i32>
 }
 
-#[derive(Insertable, Deserialize, Serialize, Debug)]
+#[derive(Insertable, Deserialize, Serialize, Debug, AsChangeset)]
 #[diesel(table_name = crate::schema::books)]
 pub struct NewBook {
     pub title: String,
