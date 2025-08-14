@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block body %}
+  <ul>
+    {% for user in users %}
+      {% include 'user_card.html' %}
+    {% endfor %}
+  </ul>
+
+  <div class="grid sm:grid-cols-2 gap-4">
+    {% for book in books %}
+      {% include 'book_card.html' %}
+    {% endfor %}
+  </div>
+{% endblock %}
