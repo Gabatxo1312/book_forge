@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::{extract::State, response::Html, routing::get, Router};
 
-use crate::{config::AppConfig, handlers::helpers::render_template, repository::Repository};
+use crate::{config::AppConfig, handlers::helpers::render_template, repositories::{book_repository::BookRepository, DatabaseConnection}};
 
 pub mod helpers;
 pub mod books;
@@ -20,11 +20,11 @@ pub fn create_router(config: Arc<AppConfig>) -> Router {
 async fn root(
     State(state): State<Arc<AppConfig>>,
 ) -> Html<String> {
-    let mut repo = Repository::new(&state.database_url)
-        .expect("Failed to create repository");
-
-    let books = repo.get_all_books()
-        .expect("Failed to retrieve books");
+    let mut db = DatabaseConnection::new(&state.database_url)
+        .expect("Failed to create Connection.");
+    
+    let books = BookRepository::get_all_books(&mut db)
+        .expect("Failed to load users");
 
     let context = minijinja::context! {
         books => books
