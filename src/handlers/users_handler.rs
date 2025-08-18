@@ -1,13 +1,20 @@
 use std::sync::Arc;
 
+use askama::Template;
 use axum::{body::Body, extract::State, http::{Response, StatusCode}, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Router};
 
-use crate::{config::AppConfig, handlers::helpers::render_template, models::NewUser, repositories::{user_repository::UserRepository, DatabaseConnection}};
+use crate::{config::AppConfig, models::{NewUser, User}, repositories::{user_repository::UserRepository, DatabaseConnection}};
 
 pub fn routes() -> Router<Arc<AppConfig>> {
     Router::new()
         .route("/users", get(get_all_users))
         .route("/users", post(create_user))
+}
+
+#[derive(Template)]
+#[template(path = "users/index.html")]
+struct UsersIndexTemplate {
+    users: Vec<User>,
 }
 
 async fn get_all_users(
@@ -19,11 +26,11 @@ async fn get_all_users(
     let users = UserRepository::get_all_users(&mut db)
         .expect("Failed to get users");
 
-    let context = minijinja::context! {
-        users => users
-    };
-
-    render_template(axum::extract::State(state), "users/index.html", context)
+    Html(
+        UsersIndexTemplate {
+            users: users
+        }.render().unwrap()
+    )
 }
 
 async fn create_user(

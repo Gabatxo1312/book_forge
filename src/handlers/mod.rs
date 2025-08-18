@@ -1,10 +1,10 @@
 use std::sync::Arc;
+use askama::Template;
 
 use axum::{extract::State, response::Html, routing::get, Router};
 
-use crate::{config::AppConfig, handlers::helpers::render_template, repositories::{book_repository::BookRepository, DatabaseConnection}};
+use crate::{config::AppConfig, models::Book, repositories::{book_repository::BookRepository, DatabaseConnection}};
 
-pub mod helpers;
 pub mod books_handler;
 pub mod users_handler;
 
@@ -14,6 +14,12 @@ pub fn create_router(config: Arc<AppConfig>) -> Router {
         .merge(books_handler::routes())
         .merge(users_handler::routes())
         .with_state(config)
+}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct RootTemplate {
+    books: Vec<Book>
 }
 
 // basic handler that responds with a static string
@@ -26,9 +32,9 @@ async fn root(
     let books = BookRepository::get_all_books(&mut db)
         .expect("Failed to load users");
 
-    let context = minijinja::context! {
-        books => books
-    };
-
-    render_template(axum::extract::State(state), "index.html", context)
+    Html(
+        RootTemplate {
+            books: books
+        }.render().unwrap()
+    )
 }

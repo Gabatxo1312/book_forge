@@ -1,8 +1,9 @@
 use std::sync::Arc;
 
+use askama::Template;
 use axum::{body::Body, extract::{Path, State}, http::{Response, StatusCode}, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
 
-use crate::{config::AppConfig, handlers::helpers::render_template, models::{Book, NewBook}, repositories::{book_repository::BookRepository, user_repository::UserRepository, DatabaseConnection}};
+use crate::{config::AppConfig, models::{Book, NewBook, User}, repositories::{book_repository::BookRepository, user_repository::UserRepository, DatabaseConnection}};
 
 pub fn routes() -> Router<Arc<AppConfig>> {
     Router::new()
@@ -25,6 +26,12 @@ async fn get_all_books(
     Json(books)
 }
 
+#[derive(Template)]
+#[template(path = "books/new.html")]
+struct NewBookTemplate {
+    users: Vec<User>
+}
+
 async fn new_book(
     State(state): State<Arc<AppConfig>>
 ) -> Html<String> {
@@ -34,11 +41,11 @@ async fn new_book(
     let users = UserRepository::get_all_users(&mut db)
         .expect("Failed to load users");
 
-    let context = minijinja::context! {
-        users => users
-    };
-
-    render_template(axum::extract::State(state), "books/new.html", context)
+    Html(
+        NewBookTemplate {
+            users: users
+        }.render().unwrap()
+    )
 }
 
 async fn create_book(
@@ -54,6 +61,13 @@ async fn create_book(
     }
 }
 
+#[derive(Template)]
+#[template(path = "books/edit.html")]
+struct EditBookTemplate {
+    users: Vec<User>,
+    book: Book
+}
+
 async fn edit_book(
     State(state): State<Arc<AppConfig>>,
     Path(id): Path<i32>
@@ -67,12 +81,12 @@ async fn edit_book(
     let book = BookRepository::get_book_by_id(&mut db, id)
         .expect("Failed to load user");
 
-    let context = minijinja::context! {
-        users => users,
-        book => book
-    };
-
-    render_template(axum::extract::State(state), "books/edit.html", context)
+    Html(
+        EditBookTemplate {
+            users: users,
+            book: book
+        }.render().unwrap()
+    )
 }
 
 async fn update_book(
