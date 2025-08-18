@@ -1,21 +1,28 @@
-use diesel::{query_dsl::methods::{FindDsl, SelectDsl}, QueryResult, RunQueryDsl, SelectableHelper};
+use diesel::{alias, query_dsl::methods::{SelectDsl}, ExpressionMethods, JoinOnDsl, NullableExpressionMethods, QueryDsl, QueryResult, RunQueryDsl, SelectableHelper};
 
-use crate::{models::{Book, NewBook}, schema::books};
+use crate::{models::{Book, NewBook, User}, schema::{books, users}};
 
 use super::DatabaseConnection;
 
 pub struct BookRepository;
 
 impl BookRepository {
-    pub fn get_all_books(db: &mut DatabaseConnection) -> QueryResult<Vec<Book>> {
+    pub fn get_all_books_with_users(db: &mut DatabaseConnection) -> QueryResult<Vec<(Book, User, Option<User>)>> {
+        let holders = alias!(users as holders);
+
         books::table
-            .select(Book::as_select())
+            .inner_join(users::table.on(books::owner_id.eq(users::id)))
+            .left_join(holders.on(books::current_holder_id.eq(holders.field(users::id).nullable())))
+            .load::<(Book, User, Option<User>)>(db.connection())
+    }
+
+    pub fn get_all_books(db: &mut DatabaseConnection) -> QueryResult<Vec<Book>> {
+        SelectDsl::select(books::table, Book::as_select())
             .load(db.connection())
     }
 
     pub fn get_book_by_id(db: &mut DatabaseConnection, book_id: i32) -> QueryResult<Book> {
-        books::dsl::books.find(book_id)
-            .select(Book::as_select())
+        SelectDsl::select(QueryDsl::find(books::dsl::books, book_id), Book::as_select())
             .first(db.connection())
     }
 
@@ -26,7 +33,7 @@ impl BookRepository {
     }
 
     pub fn update_book(db: &mut DatabaseConnection, book_id: i32, book: &NewBook) -> QueryResult<Book> {
-        diesel::update(books::dsl::books.find(book_id))
+        diesel::update(QueryDsl::find(books::dsl::books, book_id))
             .set(book)
             .get_result(db.connection())
     }

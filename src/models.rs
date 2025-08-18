@@ -6,7 +6,7 @@ pub struct ErrorResponse {
    pub  error: String,
 }
 
-#[derive(Queryable, Selectable, Serialize)]
+#[derive(Queryable, Selectable, Serialize, AsChangeset)]
 #[diesel(table_name = crate::schema::users)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct User {

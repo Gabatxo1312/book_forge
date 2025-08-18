@@ -1,7 +1,14 @@
 <div class="mx-auto flex w-full items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5">
   <div>
-    {{ book.id}} : {{ book.title }}
+    {{ item.0.id}} : {{ item.0.title }} appartient a {{ item.1.name }}.
+
+    {% match item.2 %}
+      {% when Some with (holder) %}
+        (actuellement prêté à {{ holder.name }})
+      {% when None %}
+        (pas de prêt en cours)
+    {% endmatch %}
   </div>
 
-  <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ book.id }}/edit">Edit</a>
+  <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ item.0.id }}/edit">Edit</a>
 </div>
