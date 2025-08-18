@@ -9,6 +9,11 @@ Create database.db :
 diesel setup
 ```
 
+Copy env example and edit .env with your credentials :
+```bash
+cp .env.example .env
+```
+
 then run cargo : 
 
 ```bash
