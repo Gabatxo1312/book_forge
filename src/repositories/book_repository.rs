@@ -1,18 +1,29 @@
-use diesel::{alias, query_dsl::methods::{SelectDsl}, ExpressionMethods, JoinOnDsl, NullableExpressionMethods, QueryDsl, QueryResult, RunQueryDsl, SelectableHelper};
+use diesel::{alias, query_dsl::methods::SelectDsl, ExpressionMethods, JoinOnDsl, NullableExpressionMethods, QueryDsl, QueryResult, RunQueryDsl, SelectableHelper, TextExpressionMethods};
 
-use crate::{models::{Book, NewBook, User}, schema::{books, users}};
+use crate::{models::{Book, NewBook, User}, schema::{books::{self, title}, users}};
 
 use super::DatabaseConnection;
 
 pub struct BookRepository;
 
 impl BookRepository {
-    pub fn get_all_books_with_users(db: &mut DatabaseConnection) -> QueryResult<Vec<(Book, User, Option<User>)>> {
+    pub fn get_all_books_with_users(db: &mut DatabaseConnection, search_term: Option<String>) -> QueryResult<Vec<(Book, User, Option<User>)>> {
         let holders = alias!(users as holders);
+        let base_query = books::table.into_boxed();
 
-        books::table
+        let filtered_query = match search_term {
+            Some(term) => base_query.filter(books::title.like(format!("%{}%", term))),
+            None => base_query,
+        };
+
+        SelectDsl::select(filtered_query 
             .inner_join(users::table.on(books::owner_id.eq(users::id)))
-            .left_join(holders.on(books::current_holder_id.eq(holders.field(users::id).nullable())))
+            .left_join(holders.on(books::current_holder_id.eq(holders.field(users::id).nullable()))),
+            (
+                books::all_columns,
+                users::all_columns,
+                holders.fields(users::all_columns).nullable()
+            ))
             .load::<(Book, User, Option<User>)>(db.connection())
     }
 
