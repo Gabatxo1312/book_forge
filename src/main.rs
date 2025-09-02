@@ -1,4 +1,5 @@
 use book_forge::{config::AppConfig, handlers::create_router};
+use std::error::Error;
 
 #[tokio::main]
 async fn main() {

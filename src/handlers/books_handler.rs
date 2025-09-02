@@ -1,9 +1,12 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use askama::Template;
-use axum::{body::Body, extract::{Path, State}, http::{Response, StatusCode}, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
+use axum::{body::Body, extract::{Path, Query, State}, http::{Response, StatusCode}, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
 
 use crate::{config::AppConfig, models::{Book, NewBook, User}, repositories::{book_repository::BookRepository, user_repository::UserRepository, DatabaseConnection}};
+
+use crate::services::api::open_library;
+use crate::services::api::errors;
 
 pub fn routes() -> Router<Arc<AppConfig>> {
     Router::new()
@@ -12,6 +15,7 @@ pub fn routes() -> Router<Arc<AppConfig>> {
         .route("/books/new", get(new_book))
         .route("/books/:id/edit", get(edit_book))
         .route("/books/:id", post(update_book))
+        .route("/books/search", get(search_book_in_open_library))
 }
 
 async fn get_all_books(
@@ -102,3 +106,22 @@ async fn update_book(
         Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
     }
 }
+
+async fn search_book_in_open_library(
+    Query(params): Query<HashMap<String, String>>,
+    State(_state): State<Arc<AppConfig>>
+) -> impl IntoResponse {
+    let params_name = String::from("query");
+    let query_value = params.get(&params_name);
+
+    match query_value {
+        Some(val) => {
+            match open_library::get_book_from_api(Some(val)).await {
+                Ok(books) => Ok(Json(books)),
+                Err(e) => Err(errors::ApiError::OpenLibraryError(e.to_string()).into_response())
+            }
+        },
+        None => Err(errors::ApiError::QueryParamMissing.into_response())
+    }
+}
+

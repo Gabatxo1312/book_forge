@@ -1,6 +1,6 @@
 use diesel::{alias, query_dsl::methods::SelectDsl, ExpressionMethods, JoinOnDsl, NullableExpressionMethods, QueryDsl, QueryResult, RunQueryDsl, SelectableHelper, TextExpressionMethods};
 
-use crate::{models::{Book, NewBook, User}, schema::{books::{self, title}, users}};
+use crate::{models::{Book, NewBook, User}, schema::{books::{self}, users}};
 
 use super::DatabaseConnection;
 
