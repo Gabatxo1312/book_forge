@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+  <form method="get">
+    <label for="search" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search Book</label>
+    <input type="text" name="query" id="query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Lord of the ring" />
+
+    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+    <a href="/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Reinitialization</a>
+  </form>
+
+  <div class="grid sm:grid-cols-2 gap-4">
+    {% for item in books %}
+      {% include "book_card.html" %}
+    {% endfor %}
+  </div>
+{% endblock %}
