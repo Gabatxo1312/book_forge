@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block body %}
+<p>title: {{ book.title }}</p>
+<p>owner: {{ owner.name }}</p>
+<p>Current Holder:
+{% match current_holder %}
+  {% when Some with (current_holder) %}
+    {{ current_holder.name }}
+  {% when None %}
+    Nobody
+{% endmatch %}
+</p>
+
+<a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ book.id }}/edit">Edit</a>
+{% endblock %}

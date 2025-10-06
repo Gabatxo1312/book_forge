@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+
+{% block title %}Add a book{% endblock %}
+
+{% block body %}
+<form action="/books" method="post">
+  <div>
+    <div>
+      <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+      <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Lord of the ring" required />
+    </div>
+
+    <div>
+      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an owner</label>
+      <select id="owner_id" name="owner_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+        {% for user in users %}
+          <option value="{{ user.id }}">{{ user.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selectionner le detenteur actuel</label>
+      <select id="current_holder_id" name="current_holder_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option value=""></option>
+        {% for user in users %}
+          <option value="{{ user.id }}">{{ user.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+  </div>
+
+  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+</form>
+{% endblock %}

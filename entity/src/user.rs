@@ -16,3 +16,16 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+
+impl Model {
+    pub fn find_owned_books(&self) -> Select<super::book::Entity> {
+        super::book::Entity::find()
+            .filter(super::book::Column::OwnerId.eq(self.id))
+    }
+    
+    pub fn find_held_books(&self) -> Select<super::book::Entity> {
+        super::book::Entity::find()
+            .filter(super::book::Column::CurrentHolderId.eq(self.id))
+    }
+}

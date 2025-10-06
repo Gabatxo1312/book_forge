@@ -12,7 +12,7 @@
   </form>
 
   <div class="grid sm:grid-cols-2 gap-4">
-    {% for item in books %}
+    {% for (book, owner, current_holder) in books_with_users %}
       {% include "book_card.html" %}
     {% endfor %}
   </div>
