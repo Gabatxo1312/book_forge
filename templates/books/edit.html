@@ -5,13 +5,13 @@
 {% block body %}
 <form action="/books/{{ book.id }}" method="post">
   <div>
-    <div>
-      <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+    <div class="mb-3">
+      <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Title</label>
       <input type="text" name="title" id="title" value="{{ book.title }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Lord of the ring" required />
     </div>
 
-    <div>
-      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an owner</label>
+    <div class="mb-3">
+      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">Select an owner</label>
       <select id="owner_id" name="owner_id" value="{{ book.owner_id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
         {% for user in users %}
           {% if user.id == book.owner_id %}
@@ -23,8 +23,8 @@
       </select>
     </div>
 
-    <div>
-      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an holder</label>
+    <div class="mb-3">
+      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900">Select an holder</label>
       <select id="current_holder_id" name="current_holder_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         <option value="">Aucun</option>
         {% for user in users %}

@@ -15,8 +15,7 @@ pub fn routes() -> Router<Arc<AppConfig>> {
         .route("/books/new", get(new_book))
         .route("/books", post(create_book))
         .route("/books/:id/edit", get(edit_book))
-        .route("/books/:id", post(update_book))
-        .route("/books/:id", get(show_book))
+        .route("/books/:id", get(show_book).post(update_book))
         .route("/books/:id/delete", post(delete_book))
 } 
 
@@ -149,8 +148,6 @@ async fn create_book(
         current_holder_id: Set(current_holder_id),
         ..Default::default()
     };
-
-    println!("{:?}", new_book);
 
     new_book.insert(&state.db).await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
