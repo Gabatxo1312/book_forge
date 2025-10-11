@@ -12,6 +12,8 @@
         coverUrl: '',
         title: '',
         async searchItems() {
+            this.items = [];
+
             if (this.query.length === 0) {
                 this.items = [];
                 return;
@@ -23,10 +25,12 @@
                     `/books/search?query=${encodeURIComponent(this.query)}`
                 );
                 const result = await response.json();
-                this.items = result.docs;
+                this.items = result.docs.slice(0, 30);
+                console.log(this.items)
                 this.open = true;
             } catch (error) {
-                console.error('Erreur:', error);
+                this.open = false;
+                console.error('Error:', error);
             } finally {
                 this.loading = false;
             }
@@ -34,36 +38,41 @@
         selectItem(item) {
           this.title = item.title;
           this.coverUrl = `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}-L.jpg`;
-          this.items = []; // Vider les résultats
+          this.items = [];
           this.open = false;
         }
     }">
     <div class="mb-3">
       <label for="search" class="block mb-2 text-sm font-medium text-gray-900">Recherche sur OpenLibrary</label>
-      <input 
-        type="text"
-        name="search"
-        id="search"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Ex: Lord of the ring, Virginia Wolff" 
-        x-model="query"
-        @input.debounce.300ms="searchItems()"
-      />
+      <div class="relative">
+        <input 
+          type="text"
+          name="search"
+          id="search"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="Ex: Lord of the ring, Virginia Wolff" 
+          x-model="query"
+          @input.debounce.300ms="searchItems()"
+        />
 
-      <p x-show="loading">🔄 Recherche...</p>
+        <div x-show="open || loading" class="absolute top-11 w-full bg-white shadow-lg rounded-md border border-blue-950 h-[250px] overflow-hidden overflow-y-auto">
+          <p x-show="loading">🔄 Recherche...</p>
         
-      <ul x-show="open">
-        <template x-for="item in items" :key="items.indexOf(item)">
-          <li class="item" @click="selectItem(item)">
-            <h3 x-text="item.title"></h3>
-            <p x-text="item.author_name"></p>
-          </li>
-        </template>
-      </ul>
-      
-      <p x-show="items.length === 0 && query && !loading && open">
-        Aucun résulta
-      </p>
+          <ul x-show="open">
+            <template x-for="item in items" :key="items.indexOf(item)">
+              <li class="item px-4 py-2 flex gap-4" @click="selectItem(item)">
+                <h3 x-text="item.title"></h3>
+                <p class="mb-0 text-gray-500 italic" x-text="item.author_name.join(',')"></p>
+              </li>
+            </template>
+          </ul>
+          
+          <p x-show="items.length === 0 && query && !loading && open">
+            Aucun résulta
+          </p>
+
+        </div>
+      </div>
     </div>
      
     <div class="mb-3">

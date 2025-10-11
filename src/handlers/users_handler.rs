@@ -44,7 +44,7 @@ struct EditUserTemplate {
 }
 
 async fn edit_user(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>
 ) -> Result<Html<String>, StatusCode> {
     let user: Option<user::Model> = user::Entity::find_by_id(id).one(&state.db)
@@ -65,7 +65,7 @@ async fn edit_user(
 }
 
 async fn update_user(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,
     Form(payload): Form<user::Model>
 ) -> Result<Redirect, StatusCode> {
@@ -100,7 +100,7 @@ async fn create_user(
 }
 
 async fn delete_user(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>
 ) -> Result<Redirect, StatusCode> {
     let _: DeleteResult = user::Entity::delete_by_id(id)
