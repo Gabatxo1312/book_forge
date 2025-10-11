@@ -24,6 +24,9 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(pk_auto(Book::Id).not_null())
                     .col(string(Book::Title).not_null())
+                    .col(string(Book::Description).null())
+                    .col(string(Book::OpenLibraryLink).null())
+                    .col(string(Book::CoverUrl).null())
                     .col(integer(Book::OwnerId).not_null())
                     .col(ColumnDef::new(Book::CurrentHolderId).integer().null())
                     .foreign_key(
@@ -60,7 +63,10 @@ enum Book {
     Id,
     Title,
     OwnerId,
-    CurrentHolderId
+    CurrentHolderId,
+    Description,
+    OpenLibraryLink,
+    CoverUrl
 }
 
 #[derive(DeriveIden)]

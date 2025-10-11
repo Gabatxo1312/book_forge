@@ -28,7 +28,10 @@ struct RootTemplate {
 async fn root(
     State(state): State<Arc<AppConfig>>
 ) -> Result<Html<String>, StatusCode> {
-    let all_books = book::Entity::find().all(&state.db).await.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let all_books = book::Entity::find().all(&state.db).await.map_err(|err| {
+        println!("{:?}", err);
+        StatusCode::INTERNAL_SERVER_ERROR 
+    })?;
 
     let user_ids: Vec<i32> = all_books.iter().flat_map(|book| {
         let mut ids = vec![book.owner_id];

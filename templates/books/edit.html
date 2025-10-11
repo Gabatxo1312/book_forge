@@ -11,6 +11,25 @@
     </div>
 
     <div class="mb-3">
+      <label for="description" class="block mb-2 text-sm font-medium text-gray-900">description</label>
+      <textarea name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        {{ book.description | display_some }}
+      </textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="cover_url" class="block mb-2 text-sm font-medium text-gray-900">Cover Url</label>
+      <input type="text" name="cover_url" id="cover_url" value="{{ book.cover_url | display_some }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    </div>
+
+    <div class="mb-3">
+      <label for="open_library_link" class="block mb-2 text-sm font-medium text-gray-900">Open Library Url</label>
+      <input type="text" name="open_library_link" id="open_library_link" value="{{ book.open_library_link | display_some }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    </div>
+
+
+
+    <div class="mb-3">
       <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">Select an owner</label>
       <select id="owner_id" name="owner_id" value="{{ book.owner_id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
         {% for user in users %}
@@ -34,14 +53,14 @@
                 <option value="{{ user.id }}" {% if user.id == *current_holder_id %}selected{% endif %}>{{ user.name }}</option>
               {% when None %}
                 <option value="{{ user.id }}">{{ user.name }}</option>
-            {% endmatch %}
-          {% endif %}
+              {% endmatch %}
+            {% endif %}
         {% endfor %}
       </select>
     </div>
   </div>
 
-  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
 </form>
 {% endblock %}
 

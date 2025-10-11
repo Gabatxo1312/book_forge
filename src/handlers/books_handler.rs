@@ -1,14 +1,18 @@
-use std::{sync::Arc};
+use std::{collections::HashMap, sync::Arc};
 
 use askama::Template;
 use sea_orm::{ ActiveModelTrait, DeleteResult, EntityTrait, Set };
-use axum::{extract::{Path, State}, http::StatusCode, response::{Html, Redirect}, routing::{get, post}, Form, Router};
+use axum::{extract::{Path, Query, State}, http::StatusCode, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
 
 use crate::{config::AppConfig, helpers::convert_params_string_to_id};
 use serde::Deserialize;
 
 use entity::user;
 use entity::book;
+
+use crate::helpers::filters;
+
+use crate::services;
 
 pub fn routes() -> Router<Arc<AppConfig>> {
     Router::new()
@@ -17,12 +21,16 @@ pub fn routes() -> Router<Arc<AppConfig>> {
         .route("/books/:id/edit", get(edit_book))
         .route("/books/:id", get(show_book).post(update_book))
         .route("/books/:id/delete", post(delete_book))
+        .route("/books/search", get(search_book_in_open_library))
 } 
 
 #[derive(Deserialize)]
 struct BookForm {
     title: String,
     owner_id: i32,
+    description: Option<String>,
+    open_library_link: Option<String>,
+    cover_url: Option<String>,
     current_holder_id: Option<String>
 }
 
@@ -126,6 +134,9 @@ async fn update_book(
 
     book_by_id.title = Set(payload.title);
     book_by_id.owner_id = Set(payload.owner_id);
+    book_by_id.description= Set(payload.description);
+    book_by_id.open_library_link = Set(payload.open_library_link);
+    book_by_id.cover_url = Set(payload.cover_url);
     book_by_id.current_holder_id = Set(current_holder_id);
 
     let _: book::Model = book_by_id.update(&state.db)
@@ -146,6 +157,9 @@ async fn create_book(
         title: Set(payload.title .to_owned()),
         owner_id: Set(payload.owner_id.to_owned()),
         current_holder_id: Set(current_holder_id),
+        description: Set(payload.description),
+        open_library_link: Set(payload.open_library_link),
+        cover_url: Set(payload.cover_url),
         ..Default::default()
     };
 
@@ -167,4 +181,20 @@ async fn delete_book(
     Ok(Redirect::to("/"))
 }
 
+async fn search_book_in_open_library(
+    Query(params): Query<HashMap<String, String>>,
+    State(_state): State<Arc<AppConfig>>
+) -> impl IntoResponse {
+    let params_name = String::from("query");
+    let query_value = params.get(&params_name);
 
+    match query_value {
+        Some(val) => {
+            match services::open_library::get_book_from_api(Some(val)).await {
+                Ok(books) => Ok(Json(books)),
+                Err(e) => Err(services::errors::ApiError::OpenLibraryError(e.to_string()).into_response())
+            }
+        },
+        None => Err(services::errors::ApiError::QueryParamMissing.into_response())
+    }
+}

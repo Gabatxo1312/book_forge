@@ -11,7 +11,10 @@ pub struct Model {
     pub id: i32,
     pub title: String,
     pub owner_id: i32,
-    pub current_holder_id: Option<i32>,
+    pub description: Option<String>,
+    pub cover_url: Option<String>,
+    pub open_library_link: Option<String>,
+    pub current_holder_id: Option<i32>
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
