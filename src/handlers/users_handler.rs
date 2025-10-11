@@ -4,11 +4,11 @@ use askama::Template;
 use sea_orm::{ EntityTrait, Set, ActiveModelTrait };
 use axum::{extract::State, http::{StatusCode}, response::{Html, Redirect}, routing::{get, post}, Form, Router};
 
-use crate::{config::AppConfig};
+use crate::config::AppState;
 
 use entity::user;
 
-pub fn routes() -> Router<Arc<AppConfig>> {
+pub fn routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/users", get(get_all_users))
         .route("/users", post(create_user))
@@ -21,7 +21,7 @@ struct UsersIndexTemplate {
 }
 
 async fn get_all_users(
-    State(state): State<Arc<AppConfig>>
+    State(state): State<Arc<AppState>>
 ) -> Result<Html<String>, StatusCode> {
     let users = user::Entity::find().all(&state.db)
         .await
@@ -35,7 +35,7 @@ async fn get_all_users(
 }
 
 async fn create_user(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Form(payload): Form<user::Model>
 ) -> Result<Redirect, StatusCode> {
     let new_user = user::ActiveModel {
