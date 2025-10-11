@@ -3,6 +3,8 @@
 {% block title %}{{ book.title }}{% endblock %}
 
 {% block body %}
+<img src="{{ book.cover_url | display_some }}" />
+
 <p>title: {{ book.title }}</p>
 <p>owner: {{ owner.name }}</p>
 <p>Current Holder:
@@ -12,7 +14,18 @@
   {% when None %}
     Nobody
 {% endmatch %}
+<p>Description: {{ book.description | display_some }}</p>
+<p>Open library link:
+  {% match book.open_library_link %}
+    {% when Some(val) %}
+      <a href="{{ val }}" target="_blank">Voir le lien</a>
+    {% when None %} 
+      Non renseigné
+  {% endmatch %}
+</p>
 </p>
 
-<a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ book.id }}/edit">Edit</a>
+<div class="mt-3">
+  <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ book.id }}/edit">Edit</a>
+</div>
 {% endblock %}
