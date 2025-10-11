@@ -4,7 +4,7 @@ use askama::Template;
 use sea_orm::{ ActiveModelTrait, DeleteResult, EntityTrait, Set };
 use axum::{extract::{Path, Query, State}, http::StatusCode, response::{Html, IntoResponse, Redirect}, routing::{get, post}, Form, Json, Router};
 
-use crate::{config::AppConfig, helpers::convert_params_string_to_id};
+use crate::{config::AppState, helpers::convert_params_string_to_id};
 use serde::Deserialize;
 
 use entity::user;
@@ -14,7 +14,7 @@ use crate::helpers::filters;
 
 use crate::services;
 
-pub fn routes() -> Router<Arc<AppConfig>> {
+pub fn routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/books/new", get(new_book))
         .route("/books", post(create_book))
@@ -43,7 +43,7 @@ struct ShowBookTemplate {
 }
 
 async fn show_book(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>
 ) -> Result<Html<String>, StatusCode> {
     let book = book::Entity::find_by_id(id)
@@ -80,7 +80,7 @@ struct NewBookTemplate {
 }
 
 async fn new_book(
-    State(state): State<Arc<AppConfig>>
+    State(state): State<Arc<AppState>>
 ) -> Result<Html<String>, StatusCode> {
     let users = user::Entity::find().all(&state.db)
         .await
@@ -101,7 +101,7 @@ struct EditBookTemplate {
 }
 
 async fn edit_book(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>
 ) -> Result<Html<String>, StatusCode> {
     let users = user::Entity::find().all(&state.db)
@@ -120,7 +120,7 @@ async fn edit_book(
 }
 
 async fn update_book(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,
     Form(payload): Form<BookForm>
 ) -> Result<Redirect, StatusCode> {
@@ -147,7 +147,7 @@ async fn update_book(
 }
 
 async fn create_book(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Form(payload): Form<BookForm>
 ) -> Result<Redirect, StatusCode> {
     let current_holder_id = payload.current_holder_id
@@ -170,7 +170,7 @@ async fn create_book(
 }
 
 async fn delete_book(
-    State(state): State<Arc<AppConfig>>,
+    State(state): State<Arc<AppState>>,
     Path(id): Path<i32>
 ) -> Result<Redirect, StatusCode> {
     let _: DeleteResult = book::Entity::delete_by_id(id)
@@ -183,7 +183,7 @@ async fn delete_book(
 
 async fn search_book_in_open_library(
     Query(params): Query<HashMap<String, String>>,
-    State(_state): State<Arc<AppConfig>>
+    State(_state): State<Arc<AppState>>
 ) -> impl IntoResponse {
     let params_name = String::from("query");
     let query_value = params.get(&params_name);

@@ -11,11 +11,11 @@ entity = { path = "entity" }
 migration = { path = "migration" }
 tokio = { version = "1", features = ["full"] }
 sea-orm = { version = "1.1.2", features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ] }
-dotenvy = "0.15"
 askama = "0.14.0"
 axum = {version = "0.7"}
 serde = "1.0.228"
 reqwest = { version = "0.12.23", features = ["json"] }
 serde_json = "1.0.145"
+toml = "0.9.8"
 # serde = { version = "1.0", features = ["derive"] }
 # serde_json = "1.0"

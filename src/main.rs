@@ -1,8 +1,8 @@
-use book_forge::{ config::AppConfig, handlers::create_router };
+use book_forge::{ config::AppState, handlers::create_router };
 
 #[tokio::main]
 async fn main() -> Result<(), sea_orm::DbErr> {
-    let state = AppConfig::from_env().await?;
+    let state = AppState::initialize().await?;
 
     let app = create_router(state);
 

@@ -2,7 +2,7 @@ use std::{collections::HashMap, sync::Arc};
 use askama::Template;
 
 use axum::{extract::State, http::StatusCode, response::Html, routing::get, Router};
-use crate::{config::AppConfig};
+use crate::{config::AppState};
 use sea_orm::{ ColumnTrait, EntityTrait, QueryFilter };
 use entity::book;
 use entity::user;
@@ -10,7 +10,7 @@ use entity::user;
 pub mod users_handler;
 pub mod books_handler;
 
-pub fn create_router(config: Arc<AppConfig>) -> Router {
+pub fn create_router(config: Arc<AppState>) -> Router {
     Router::new()
         .route("/", get(root))
         .merge(users_handler::routes())
@@ -26,7 +26,7 @@ struct RootTemplate {
 
 // basic handler that responds with a static string
 async fn root(
-    State(state): State<Arc<AppConfig>>
+    State(state): State<Arc<AppState>>
 ) -> Result<Html<String>, StatusCode> {
     let all_books = book::Entity::find().all(&state.db).await.map_err(|err| {
         println!("{:?}", err);
