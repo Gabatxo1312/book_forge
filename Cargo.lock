@@ -490,6 +490,7 @@ dependencies = [
  "askama",
  "axum",
  "entity",
+ "log",
  "migration",
  "reqwest",
  "sea-orm",
