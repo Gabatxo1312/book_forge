@@ -1,9 +1,10 @@
 use std::{collections::HashMap, sync::Arc};
 use askama::Template;
 
+use axum::extract::Query;
 use axum::{extract::State, http::StatusCode, response::Html, routing::get, Router};
 use crate::{config::AppState};
-use sea_orm::{ ColumnTrait, EntityTrait, QueryFilter };
+use sea_orm::{ ColumnTrait, EntityTrait, QueryFilter, QueryOrder, QueryTrait };
 use entity::book;
 use entity::user;
 
@@ -21,34 +22,52 @@ pub fn create_router(config: Arc<AppState>) -> Router {
 #[derive(Template)]
 #[template(path = "index.html")]
 struct RootTemplate {
-    books_with_users: Vec<(book::Model, Option<user::Model>, Option<user::Model>)>
+    books_with_users: Vec<(book::Model, Option<user::Model>, Option<user::Model>)>,
+    users: Vec<user::Model>
 }
 
 // basic handler that responds with a static string
 async fn root(
-    State(state): State<Arc<AppState>>
+    State(state): State<Arc<AppState>>,
+    Query(params): Query<HashMap<String, String>>
 ) -> Result<Html<String>, StatusCode> {
-    let all_books = book::Entity::find().all(&state.db).await.map_err(|err| {
+    // Get query values from Query extractor
+    let query_search: Option<&String> = params.get(&String::from("q"));
+    let query_owner: Option<&String> = params.get(&String::from("owner_id"));
+    let query_holder: Option<&String> = params.get(&String::from("current_holder_id"));
+
+    // Get all users (possible because there are a few user)
+    let users: Vec<user::Model> = user::Entity::find()
+        .all(&state.db)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    
+    // Get all books with get filters
+    let all_books = book::Entity::find()
+        .apply_if(query_owner, |query, value| {
+            match value.parse::<i32>() {
+                Ok(q) => query.filter(book::Column::OwnerId.eq(q)),
+                Err(_) => query
+            }
+        })
+        .apply_if(query_holder, |query, value| {
+            match value.parse::<i32>() {
+                Ok(q) => query.filter(book::Column::CurrentHolderId.eq(q)),
+                Err(_) => query
+            }
+        })
+        .apply_if(query_search, |query, value| {
+            query.filter(book::Column::Title.contains(String::from(value)))
+        })
+        .order_by_desc(book::Column::Id)
+        .all(&state.db)
+        .await
+        .map_err(|err| {
         println!("{:?}", err);
         StatusCode::INTERNAL_SERVER_ERROR 
     })?;
 
-    let user_ids: Vec<i32> = all_books.iter().flat_map(|book| {
-        let mut ids = vec![book.owner_id];
-        if let Some(current_holder_id) = book.current_holder_id {
-            ids.push(current_holder_id)
-        }
-        ids
-    }).collect();
-
-    // get all users
-    let users: Vec<user::Model> = user::Entity::find()
-        .filter(user::Column::Id.is_in(user_ids))
-        .all(&state.db)
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-    let users_hash: HashMap<i32, user::Model> = users.into_iter().map(|user| (user.id, user)).collect();
+    let users_hash: HashMap<i32, user::Model> = users.clone().into_iter().map(|user| (user.id, user)).collect();
 
     let books_with_users = all_books.into_iter().map(|book| {
         let owner = users_hash.get(&book.owner_id).map(|u| (*u).clone());
@@ -59,6 +78,7 @@ async fn root(
     Ok(Html(
             RootTemplate {
                 books_with_users: books_with_users,
+                users: users
             }.render().unwrap()
     ))
 }

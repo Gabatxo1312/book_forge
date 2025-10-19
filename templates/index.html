@@ -3,9 +3,31 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-  <form method="get">
-    <label for="search" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search Book</label>
-    <input type="text" name="query" id="query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Lord of the ring" />
+  <form method="get" 
+    x-data="{
+      q: new URLSearchParams(window.location.search).get('q') || '',
+      owner_id: new URLSearchParams(window.location.search).get('owner_id') || '',
+      current_holder_id: new URLSearchParams(window.location.search).get('current_holder_id') || '',
+    }"
+  >
+    <label for="search" class="block mb-2 text-sm font-medium text-gray-900">Search Book by title</label>
+    <input type="text" name="q" id="q" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Lord of the ring" x-model="q" />
+
+    <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">Select an owner</label>
+    <select id="owner_id" name="owner_id" x-model="owner_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <option value=""></option>
+      {% for user in users %}
+        <option value="{{ user.id }}">{{ user.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900">Current holder id</label>
+    <select id="current_holder_id" name="current_holder_id" x-model="current_holder_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <option value=""></option>
+      {% for user in users %}
+        <option value="{{ user.id }}">{{ user.name }}</option>
+      {% endfor %}
+    </select>
 
     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     <a href="/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Reinitialization</a>
