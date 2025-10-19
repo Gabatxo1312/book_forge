@@ -53,7 +53,6 @@ async fn show_book(
 
     let book = book.unwrap();
 
-    // TODO optimize this 2 request into 1
     let owner = user::Entity::find_by_id(book.clone().owner_id)
         .one(&state.db)
         .await

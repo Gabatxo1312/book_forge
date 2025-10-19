@@ -1,4 +1,4 @@
-use std::{env, fs, panic, path::Path, sync::Arc};
+use std::{env, fs, path::Path, sync::Arc};
 
 use serde::Deserialize;
 
