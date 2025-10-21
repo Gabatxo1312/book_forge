@@ -7,7 +7,7 @@ async fn main() -> Result<(), sea_orm::DbErr> {
 
     let state = AppState::initialize().await?;
 
-    rust_i18n::set_locale(state.config.locales.as_str());
+    rust_i18n::set_locale(state.locale.as_str());
 
     let app = create_router(state).layer(TraceLayer::new_for_http());
 

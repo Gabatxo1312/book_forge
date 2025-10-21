@@ -11,7 +11,7 @@ const DEFAULT_DATABASE_URL: &str = "sqlite://db.sqlite?mode=rwc";
 #[derive(Clone)]
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,
-    pub config: AppConfig
+    pub locale: String
 }
 
 impl AppState {
@@ -24,7 +24,7 @@ impl AppState {
 
         Ok(Arc::new(Self {
             db: connection.clone(),
-            config: config
+            locale: config.locale
         }))
     }
 
@@ -45,14 +45,14 @@ impl AppState {
 #[derive(Clone, Debug, Deserialize)]
 pub struct AppConfig {
     pub database_url: String,
-    pub locales: String
+    pub locale: String
 }
 
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
             database_url: DEFAULT_DATABASE_URL.to_string(),
-            locales: String::from("en")
+            locale: String::from("en")
         }
     }
 }
