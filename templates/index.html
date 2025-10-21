@@ -8,6 +8,7 @@
       q: new URLSearchParams(window.location.search).get('q') || '',
       owner_id: new URLSearchParams(window.location.search).get('owner_id') || '',
       current_holder_id: new URLSearchParams(window.location.search).get('current_holder_id') || '',
+      authors: new URLSearchParams(window.location.search).get('authors') || '',
     }"
   >
     <div class="max-w">
@@ -17,8 +18,13 @@
 
         <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <div class="flex flex-col">
-            <label for="search" class="text-stone-600 text-sm font-medium">Search Book by title</label>
+            <label for="q" class="text-stone-600 text-sm font-medium">Search Book by title</label>
             <input type="text" name="q" id="q" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Ex: Lord of the ring" x-model="q" />
+          </div>
+
+          <div class="flex flex-col">
+            <label for="authors" class="text-stone-600 text-sm font-medium">Search Book by author.s</label>
+            <input type="text" name="authors" id="authors" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Ex: Pierre Kropotkine" x-model="authors" />
           </div>
 
           <div class="flex flex-col">

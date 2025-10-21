@@ -11,6 +11,7 @@
         loading: false,
         coverUrl: '',
         title: '',
+        authors: '',
         async searchItems() {
             this.items = [];
 
@@ -37,6 +38,7 @@
         },
         selectItem(item) {
           this.title = item.title;
+          this.authors = item.author_name.join(', ');
           this.coverUrl = `https://covers.openlibrary.org/b/OLID/${item.cover_edition_key}-L.jpg`;
           this.items = [];
           this.open = false;
@@ -68,7 +70,7 @@
           </ul>
           
           <p x-show="items.length === 0 && query && !loading && open">
-            Aucun résulta
+            Aucun résultat
           </p>
 
         </div>
@@ -85,6 +87,19 @@
         placeholder="Ex: Lord of the ring" 
         required 
         x-model="title"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="authors" class="block mb-2 text-sm font-medium text-gray-900">Author.s</label>
+      <input 
+        type="text"
+        name="authors"
+        id="authors"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Ex: Pierre Kropotkine" 
+        required 
+        x-model="authors"
       />
     </div>
 

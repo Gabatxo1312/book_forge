@@ -31,7 +31,8 @@ struct BookForm {
     description: Option<String>,
     open_library_link: Option<String>,
     cover_url: Option<String>,
-    current_holder_id: Option<String>
+    current_holder_id: Option<String>,
+    authors: String
 }
 
 #[derive(Template)]
@@ -137,6 +138,7 @@ async fn update_book(
     book_by_id.open_library_link = Set(payload.open_library_link);
     book_by_id.cover_url = Set(payload.cover_url);
     book_by_id.current_holder_id = Set(current_holder_id);
+    book_by_id.authors = Set(payload.authors);
 
     let _: book::Model = book_by_id.update(&state.db)
         .await
@@ -154,6 +156,7 @@ async fn create_book(
 
     let new_book = book::ActiveModel {
         title: Set(payload.title .to_owned()),
+        authors: Set(payload.authors),
         owner_id: Set(payload.owner_id.to_owned()),
         current_holder_id: Set(current_holder_id),
         description: Set(payload.description),

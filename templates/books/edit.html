@@ -11,6 +11,11 @@
     </div>
 
     <div class="mb-3">
+      <label for="authors" class="block mb-2 text-sm font-medium text-gray-900">Author.s</label>
+      <input type="text" name="authors" id="authors" value="{{ book.authors }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Pierre Kropotkine" required />
+    </div>
+
+    <div class="mb-3">
       <label for="description" class="block mb-2 text-sm font-medium text-gray-900">description</label>
       <textarea name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         {{ book.description | display_some }}
