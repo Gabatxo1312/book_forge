@@ -1,0 +1,22 @@
+_version: 1
+home:
+ title: Tableau de bord
+ no_result: Pas de resultat
+ filter: 
+   title: Filtres
+   reset: Reinitialiser
+   search: Rechercher
+book_card:
+  read_more: Voir le livre
+  belongs_to: "Appartient a %{name}"
+attributes: 
+  user:
+    name: Nom
+  book:
+    owner_id: Proprietaire
+    current_holder_id: DetenteurICE actuelLE
+    title: Titre
+    authors: AuteurICE(S)
+    description: Description
+    cover_url: Url de l'image
+    open_library_link: Lien open library

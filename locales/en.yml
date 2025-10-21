@@ -1,0 +1,22 @@
+_version: 1
+home:
+ title: Dashboard
+ no_result: No Result
+ filter: 
+   title: Apply Filters
+   reset: Reset
+   search: Search
+book_card:
+  read_more: Read More
+  belongs_to: "Belongs to %{name}"
+attributes: 
+  user:
+    name: Name
+  book:
+    owner_id: Owner
+    current_holder_id: Current Holder
+    title: Title
+    authors: Author(s)
+    description: Description
+    cover_url: Cover Url
+    open_library_link: Open library link
