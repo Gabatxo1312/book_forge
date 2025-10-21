@@ -6,6 +6,7 @@
 <img src="{{ book.cover_url | display_some }}" />
 
 <p>title: {{ book.title }}</p>
+<p>Author.s: {{ book.authors }}</p>
 <p>owner: {{ owner.name }}</p>
 <p>Current Holder:
 {% match current_holder %}

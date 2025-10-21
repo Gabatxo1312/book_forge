@@ -36,6 +36,7 @@ async fn root(
     let query_search: Option<&String> = params.get(&String::from("q"));
     let query_owner: Option<&String> = params.get(&String::from("owner_id"));
     let query_holder: Option<&String> = params.get(&String::from("current_holder_id"));
+    let author_search: Option<&String> = params.get(&String::from("authors"));
 
     // Get all users (possible because there are a few user)
     let users: Vec<user::Model> = user::Entity::find()
@@ -59,6 +60,9 @@ async fn root(
         })
         .apply_if(query_search, |query, value| {
             query.filter(book::Column::Title.contains(String::from(value)))
+        })
+        .apply_if(author_search, |query, value| {
+            query.filter(book::Column::Authors.contains(String::from(value)))
         })
         .order_by_desc(book::Column::Id)
         .all(&state.db)
