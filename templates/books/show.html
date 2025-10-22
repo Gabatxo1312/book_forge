@@ -5,31 +5,32 @@
 {% block body %}
 <img src="{{ book.cover_url | display_some }}" />
 
-<p>title: {{ book.title }}</p>
-<p>Author.s: {{ book.authors }}</p>
-<p>owner: {{ owner.name }}</p>
-<p>Current Holder:
+<p>{{ t!("attributes.book.title") }}: {{ book.title }}</p>
+<p>{{ t!("attributes.book.authors") }}: {{ book.authors }}</p>
+<p>{{ t!("attributes.book.owner_id") }}: {{ owner.name }}</p>
+<p>{{ t!("attributes.book.current_holder_id") }}:
 {% match current_holder %}
   {% when Some with (current_holder) %}
     {{ current_holder.name }}
   {% when None %}
     Nobody
 {% endmatch %}
-<p>Description: {{ book.description | display_some }}</p>
-<p>Open library link:
+<p>{{ t!("attributes.book.description") }}: {{ book.description | display_some }}</p>
+<p>{{ t!("attributes.book.open_library_link") }}
   {% match book.open_library_link %}
     {% when Some(val) %}
-      <a href="{{ val }}" target="_blank">Voir le lien</a>
+      <a href="{{ val }}" target="_blank">{{ t!("attributes.book.open_link") }}</a>
     {% when None %} 
-      Non renseigné
+      {{ t!("common.empty") }}
   {% endmatch %}
 </p>
 </p>
 
 <div class="mt-3">
-  <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ book.id }}/edit">Edit</a>
+  <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/books/{{ book.id }}/edit">{{ t!("common.edit") }}</a>
+
   <form action="/books/{{ book.id }}/delete" method="post">
-    <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-red font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">Delete</a>
+    <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-red font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">{{ t!("common.delete") }}</button>
   </form>
 </div>
 {% endblock %}

@@ -1,7 +1,6 @@
 _version: 1
 home:
  title: Dashboard
- no_result: No Result
  filter: 
    title: Apply Filters
    reset: Reset
@@ -9,6 +8,32 @@ home:
 book_card:
   read_more: Read More
   belongs_to: "Belongs to %{name}"
+navbar:
+  home: Home
+  users: Users
+  add_book: Add a Book
+books:
+  edit: 
+    title: Edit
+  new:
+    title: Add a book
+    search: Search on OpenLibrary
+    searching: Search...
+  add:
+    open_link: Open link
+users: 
+  edit:
+    title: Edit
+  index:
+    title: Users
+common: 
+  edit: Edit
+  delete: Delete
+  actions: Actions
+  add: Add
+  none: None
+  empty: Not specified
+  no_results: No results
 attributes: 
   user:
     name: Name

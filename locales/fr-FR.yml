@@ -1,22 +1,47 @@
 _version: 1
 home:
- title: Tableau de bord
- no_result: Pas de resultat
- filter: 
-   title: Filtres
-   reset: Reinitialiser
-   search: Rechercher
+  title: Tableau de bord
+  filter: 
+    title: Filtres
+    reset: Réinitialiser
+    search: Rechercher
 book_card:
   read_more: Voir le livre
-  belongs_to: "Appartient a %{name}"
+  belongs_to: "Appartient à %{name}"
+navbar:
+  home: Accueil
+  users: Utilisateurs
+  add_book: Ajouter un livre
+books:
+  edit: 
+    title: Modifier
+  new:
+    title: Ajouter un livre
+    search: Rechercher sur OpenLibrary
+    searching: Recherche en cours...
+  add:
+    open_link: Ouvrir le lien
+users: 
+  edit:
+    title: Modifier
+  index:
+    title: Utilisateurs
+common: 
+  edit: Modifier
+  delete: Supprimer
+  actions: Actions
+  add: Ajouter
+  none: Aucun
+  empty: Non renseigné
+  no_results: Aucun résultat
 attributes: 
   user:
     name: Nom
   book:
-    owner_id: Proprietaire
-    current_holder_id: DetenteurICE actuelLE
+    owner_id: Propriétaire
+    current_holder_id: Détenteur·ice actuel·le
     title: Titre
-    authors: AuteurICE(S)
+    authors: Auteur·ice(s)
     description: Description
-    cover_url: Url de l'image
-    open_library_link: Lien open library
+    cover_url: URL de l’image
+    open_library_link: Lien OpenLibrary
