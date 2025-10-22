@@ -4,6 +4,8 @@ use askama::Template;
 use sea_orm::{ ActiveModelTrait, DeleteResult, EntityTrait, Set };
 use axum::{extract::{Path, State}, http::StatusCode, response::{Html, Redirect}, routing::{get, post}, Form, Router};
 
+use rust_i18n::t;
+
 use crate::config::AppState;
 
 use entity::user;

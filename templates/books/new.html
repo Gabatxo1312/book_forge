@@ -1,6 +1,6 @@
 {% extends "_base.html" %}
 
-{% block title %}Add a book{% endblock %}
+{% block title %}{{ t!("books.new.title") }}{% endblock %}
 
 {% block body %}
 <form action="/books" method="post">
@@ -45,7 +45,7 @@
         }
     }">
     <div class="mb-3">
-      <label for="search" class="block mb-2 text-sm font-medium text-gray-900">Recherche sur OpenLibrary</label>
+      <label for="search" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("books.new.search") }}</label>
       <div class="relative">
         <input 
           type="text"
@@ -58,7 +58,7 @@
         />
 
         <div x-show="open || loading" class="absolute top-11 w-full bg-white shadow-lg rounded-md border border-blue-950 h-[250px] overflow-hidden overflow-y-auto">
-          <p x-show="loading">🔄 Recherche...</p>
+          <p x-show="loading">🔄 {{ t!("books.new.searching") }}...</p>
         
           <ul x-show="open">
             <template x-for="item in items" :key="items.indexOf(item)">
@@ -70,7 +70,7 @@
           </ul>
           
           <p x-show="items.length === 0 && query && !loading && open">
-            Aucun résultat
+            {{ t!("common.no_results") }}
           </p>
 
         </div>
@@ -78,7 +78,7 @@
     </div>
      
     <div class="mb-3">
-      <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Title</label>
+      <label for="title" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.title") }}</label>
       <input 
         type="text"
         name="title"
@@ -91,7 +91,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="authors" class="block mb-2 text-sm font-medium text-gray-900">Author.s</label>
+      <label for="authors" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.authors") }}</label>
       <input 
         type="text"
         name="authors"
@@ -104,22 +104,22 @@
     </div>
 
     <div class="mb-3">
-      <label for="description" class="block mb-2 text-sm font-medium text-gray-900">description</label>
+      <label for="description" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.") }}</label>
       <textarea name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></textarea>
     </div>
 
     <div class="mb-3">
-      <label for="cover_url" class="block mb-2 text-sm font-medium text-gray-900">Cover Url</label>
+      <label for="cover_url" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.cover_url") }}</label>
       <input type="text" name="cover_url" id="cover_url" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" x-model="coverUrl" />
     </div>
 
     <div class="mb-3">
-      <label for="open_library_link" class="block mb-2 text-sm font-medium text-gray-900">Open Library Url</label>
+      <label for="open_library_link" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.open_library_link") }}</label>
       <input type="text" name="open_library_link" id="open_library_link" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
     </div>
 
     <div class="mb-3">
-      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">Select an owner</label>
+      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.owner_id") }}</label>
       <select id="owner_id" name="owner_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
         {% for user in users %}
           <option value="{{ user.id }}">{{ user.name }}</option>
@@ -128,7 +128,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900">Selectionner le detenteur actuel</label>
+      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.current_holder_id") }}</label>
       <select id="current_holder_id" name="current_holder_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         <option value=""></option>
         {% for user in users %}
@@ -139,6 +139,6 @@
 
   </div>
 
-  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ t!("common.add") }}</button>
 </form>
 {% endblock %}

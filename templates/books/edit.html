@@ -1,41 +1,53 @@
 {% extends "_base.html" %}
 
-{% block title %}Modification : {{ book.title }}{% endblock %}
+{% block title %}
+  {{ t!("books.edit.title") }} {{ book.title }}
+{% endblock %}
 
 {% block body %}
 <form action="/books/{{ book.id }}" method="post">
   <div>
     <div class="mb-3">
-      <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Title</label>
+      <label for="title" class="block mb-2 text-sm font-medium text-gray-900">{{ t!("attributes.book.title") }}</label>
       <input type="text" name="title" id="title" value="{{ book.title }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Lord of the ring" required />
     </div>
 
     <div class="mb-3">
-      <label for="authors" class="block mb-2 text-sm font-medium text-gray-900">Author.s</label>
+      <label for="authors" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ t!("attributes.book.authors") }}
+      </label>
       <input type="text" name="authors" id="authors" value="{{ book.authors }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Pierre Kropotkine" required />
     </div>
 
     <div class="mb-3">
-      <label for="description" class="block mb-2 text-sm font-medium text-gray-900">description</label>
+      <label for="description" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ t!("attributes.book.description") }}
+      </label>
       <textarea name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         {{ book.description | display_some }}
       </textarea>
     </div>
 
     <div class="mb-3">
-      <label for="cover_url" class="block mb-2 text-sm font-medium text-gray-900">Cover Url</label>
+      <label for="cover_url" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ t!("attributes.book.cover_url") }}
+      </label>
       <input type="text" name="cover_url" id="cover_url" value="{{ book.cover_url | display_some }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
     </div>
 
     <div class="mb-3">
-      <label for="open_library_link" class="block mb-2 text-sm font-medium text-gray-900">Open Library Url</label>
+      <label for="open_library_link" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ t!("attributes.book.open_library_link") }}
+      </label>
       <input type="text" name="open_library_link" id="open_library_link" value="{{ book.open_library_link | display_some }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
     </div>
 
 
 
     <div class="mb-3">
-      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">Select an owner</label>
+      <label for="owner_id" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ t!("attributes.book.owner_id") }}
+      </label>
       <select id="owner_id" name="owner_id" value="{{ book.owner_id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
         {% for user in users %}
           {% if user.id == book.owner_id %}
@@ -48,9 +60,11 @@
     </div>
 
     <div class="mb-3">
-      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900">Select an holder</label>
+      <label for="current_holder_id" class="block mb-2 text-sm font-medium text-gray-900">
+        {{ t!("attributes.book.current_holder_id") }}
+      </label>
       <select id="current_holder_id" name="current_holder_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-        <option value="">Aucun</option>
+        <option value="">{{ t!("common.none") }}</option>
         {% for user in users %}
           {% if book.owner_id != user.id %}
             {% match book.current_holder_id %}
@@ -65,7 +79,7 @@
     </div>
   </div>
 
-  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ t!("common.edit") }}</button>
 </form>
 {% endblock %}
 

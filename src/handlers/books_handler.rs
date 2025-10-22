@@ -7,6 +7,8 @@ use axum::{extract::{Path, Query, State}, http::StatusCode, response::{Html, Int
 use crate::{config::AppState, helpers::convert_params_string_to_id};
 use serde::Deserialize;
 
+use rust_i18n::t;
+
 use entity::user;
 use entity::book;
 

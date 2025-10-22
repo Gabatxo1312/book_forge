@@ -1,6 +1,8 @@
 use std::{collections::HashMap, sync::Arc};
 use askama::Template;
 
+use rust_i18n::t;
+
 use axum::extract::Query;
 use axum::{extract::State, http::StatusCode, response::Html, routing::get, Router};
 use crate::{config::AppState};
@@ -8,6 +10,7 @@ use sea_orm::{ ColumnTrait, EntityTrait, QueryFilter, QueryOrder, QueryTrait };
 use crate::helpers::filters;
 use entity::book;
 use entity::user;
+
 
 pub mod users_handler;
 pub mod books_handler;

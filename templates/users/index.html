@@ -1,6 +1,6 @@
 {% extends "_base.html" %}
 
-{% block title %}Users{% endblock %}
+{% block title %}{{ t!("users.index.title") }}{% endblock %}
 
 {% block body %}
   <div class="relative overflow-x-auto">
@@ -8,11 +8,11 @@
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr class="bg-white border-b border-gray-200">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          name
+          {{ t!("attributes.user.name") }}
         </th>  
 
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          Actions
+          {{ t!("common.actions") }}
         </th>  
       </tr>
     </thead>
@@ -24,10 +24,14 @@
             {{ user.name }}
           </td>  
           <td class="px-6 py-4 flex gap-2">
-            <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/users/{{ user.id }}/edit">Edit</a>
+            <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center" href="/users/{{ user.id }}/edit">
+              {{ t!("common.edit") }}
+            </a>
 
             <form action="/users/{{ user.id }}/delete" method="post">
-              <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-red font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">Delete</a>
+              <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-red font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">
+                {{ t!("common.delete") }}
+              </button>
             </form>
           </td>  
         </tr>    
@@ -38,11 +42,15 @@
   <form action="/users" method="post" class="mt-10">
     <div>
       <div class="mb-3">
-        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">
+          {{ t!("attributes.user.name") }}
+        </label>
         <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ex: Karl Marx" required autofocus />
       </div>
     </div>
 
-    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      {{ t!("common.add") }}
+    </button> 
   </form>
 {% endblock %}

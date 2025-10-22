@@ -11,6 +11,7 @@ const DEFAULT_DATABASE_URL: &str = "sqlite://db.sqlite?mode=rwc";
 #[derive(Clone)]
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,
+    pub locale: String
 }
 
 impl AppState {
@@ -22,33 +23,36 @@ impl AppState {
         let connection = sea_orm::Database::connect(&config.database_url).await?;
 
         Ok(Arc::new(Self {
-            db: connection.clone()
+            db: connection.clone(),
+            locale: config.locale
         }))
     }
 
     fn create_env_file(database_url: &str) -> std::io::Result<()> {
         let env_path = Path::new(".env");
-        
+
         if !env_path.exists() {
             println!("Creating .env file with DATABASE_URL for sea_orm_cli...");
-            
+
             let mut file = fs::File::create(env_path)?;
             writeln!(file, "DATABASE_URL={}", database_url)?;
         }
-        
+
         Ok(())
     }
 }
 
 #[derive(Clone, Debug, Deserialize)]
-struct AppConfig {
-    pub database_url: String
+pub struct AppConfig {
+    pub database_url: String,
+    pub locale: String
 }
 
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
-            database_url: DEFAULT_DATABASE_URL.to_string()
+            database_url: DEFAULT_DATABASE_URL.to_string(),
+            locale: String::from("en")
         }
     }
 }

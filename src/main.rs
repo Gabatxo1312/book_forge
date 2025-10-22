@@ -4,7 +4,10 @@ use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
 async fn main() -> Result<(), sea_orm::DbErr> {
+
     let state = AppState::initialize().await?;
+
+    rust_i18n::set_locale(state.locale.as_str());
 
     let app = create_router(state).layer(TraceLayer::new_for_http());
 
@@ -19,7 +22,7 @@ async fn main() -> Result<(), sea_orm::DbErr> {
         .init();
 
     // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3001").await.unwrap(); 
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3001").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 
     Ok(())
