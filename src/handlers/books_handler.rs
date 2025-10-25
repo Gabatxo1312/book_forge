@@ -20,9 +20,9 @@ pub fn routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/books/new", get(new_book))
         .route("/books", post(create_book))
-        .route("/books/:id/edit", get(edit_book))
-        .route("/books/:id", get(show_book).post(update_book))
-        .route("/books/:id/delete", post(delete_book))
+        .route("/books/{id}/edit", get(edit_book))
+        .route("/books/{id}", get(show_book).post(update_book))
+        .route("/books/{id}/delete", post(delete_book))
         .route("/books/search", get(search_book_in_open_library))
 } 
 

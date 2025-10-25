@@ -14,9 +14,9 @@ pub fn routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/users", get(get_all_users))
         .route("/users", post(create_user))
-        .route("/users/:id/delete", post(delete_user))
-        .route("/users/:id/edit", get(edit_user))
-        .route("/users/:id", post(update_user))
+        .route("/users/{id}/delete", post(delete_user))
+        .route("/users/{id}/edit", get(edit_user))
+        .route("/users/{id}", post(update_user))
 }
 
 #[derive(Template)]
