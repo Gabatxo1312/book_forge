@@ -52,9 +52,8 @@ async fn show_book(
     let book = book::Entity::find_by_id(id)
         .one(&state.db)
         .await
-        .map_err(|_| StatusCode::NOT_FOUND)?;
-
-    let book = book.unwrap();
+        .map_err(|_| StatusCode::NOT_FOUND)?
+        .ok_or(StatusCode::NOT_FOUND)?; 
 
     let owner = user::Entity::find_by_id(book.clone().owner_id)
         .one(&state.db)
