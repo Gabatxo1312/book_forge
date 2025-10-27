@@ -15,7 +15,7 @@ pub struct Model {
     pub cover_url: Option<String>,
     pub open_library_link: Option<String>,
     pub current_holder_id: Option<i32>,
-    pub authors: String
+    pub authors: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
