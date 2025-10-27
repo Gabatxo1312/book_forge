@@ -1,4 +1,4 @@
-use sea_orm_migration::{prelude::*};
+use sea_orm_migration::prelude::*;
 
 use crate::m20251003_201722_create_book::Book;
 
@@ -8,16 +8,19 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager.alter_table(
-            Table::alter().table(Book::Table)
-            .add_column(
-                ColumnDef::new(Alias::new("authors"))
-                    .string()
-                    .not_null()
-                    .default(""),
-            ) 
-            .to_owned()
-        ).await
+        manager
+            .alter_table(
+                Table::alter()
+                    .table(Book::Table)
+                    .add_column(
+                        ColumnDef::new(Alias::new("authors"))
+                            .string()
+                            .not_null()
+                            .default(""),
+                    )
+                    .to_owned(),
+            )
+            .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {

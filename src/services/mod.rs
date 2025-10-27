@@ -1,2 +1,2 @@
-pub mod open_library;
 pub mod errors;
+pub mod open_library;

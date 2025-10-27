@@ -11,7 +11,7 @@ const DEFAULT_DATABASE_URL: &str = "sqlite://db.sqlite?mode=rwc";
 #[derive(Clone)]
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,
-    pub locale: String
+    pub locale: String,
 }
 
 impl AppState {
@@ -24,7 +24,7 @@ impl AppState {
 
         Ok(Arc::new(Self {
             db: connection.clone(),
-            locale: config.locale
+            locale: config.locale,
         }))
     }
 
@@ -45,14 +45,14 @@ impl AppState {
 #[derive(Clone, Debug, Deserialize)]
 pub struct AppConfig {
     pub database_url: String,
-    pub locale: String
+    pub locale: String,
 }
 
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
             database_url: DEFAULT_DATABASE_URL.to_string(),
-            locale: String::from("en")
+            locale: String::from("en"),
         }
     }
 }
@@ -69,8 +69,7 @@ impl AppConfig {
     pub fn from_file<T: AsRef<Path>>(path: T) -> Result<AppConfig, AppError> {
         let path = path.as_ref();
         let content = fs::read_to_string(path).map_err(|_| AppError::ConfigError)?;
-        let config: AppConfig = toml::from_str(&content)
-            .map_err(|_| AppError::ConfigError)?;
+        let config: AppConfig = toml::from_str(&content).map_err(|_| AppError::ConfigError)?;
 
         Ok(config)
     }

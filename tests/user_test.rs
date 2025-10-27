@@ -3,7 +3,6 @@ use common::setup_test::TestSetup;
 use entity::user;
 use sea_orm::{EntityTrait, QueryOrder};
 
-
 // Router::new()
 // .route("/users", get(get_all_users))
 // .route("/users", post(create_user))
@@ -30,9 +29,7 @@ async fn test_create_user() {
     let setup = TestSetup::setup_test_db().await;
     let server = setup.server;
 
-    let form_data = [
-        ("name", "Louise Michel new")
-    ];
+    let form_data = [("name", "Louise Michel new")];
 
     let response_delete = server.post("/users").form(&form_data).await;
 
@@ -79,11 +76,12 @@ async fn test_update_user() {
 
     let user = setup.test_data.users[0].clone();
 
-    let form_data = [
-        ("name", "Louise Michel")
-    ];
+    let form_data = [("name", "Louise Michel")];
 
-    let response = server.post(&format!("/users/{}", user.id)).form(&form_data).await;
+    let response = server
+        .post(&format!("/users/{}", user.id))
+        .form(&form_data)
+        .await;
 
     response.assert_status_see_other();
 
@@ -91,7 +89,7 @@ async fn test_update_user() {
         .one(&setup.db)
         .await
         .unwrap();
-    
+
     assert_eq!(user.unwrap().name, "Louise Michel");
 }
 
@@ -107,4 +105,3 @@ async fn test_delete_user() {
     let response_delete = server.post(&format!("/books/{}/delete", user.id)).await;
     response_delete.assert_status_see_other();
 }
-

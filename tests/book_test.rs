@@ -56,18 +56,12 @@ async fn test_post_new_book() {
         ("current_holder_id", ""),
     ];
 
-    let response = server
-        .post("/books")
-        .form(&form_data)
-        .await;
+    let response = server.post("/books").form(&form_data).await;
 
     response.assert_status_see_other();
     response.assert_header("location", "/");
 
-    let books = book::Entity::find()
-        .all(&setup.db)
-        .await
-        .unwrap();
+    let books = book::Entity::find().all(&setup.db).await.unwrap();
 
     // 1 in seed and another created
     assert_eq!(books.len(), 2);
@@ -141,23 +135,13 @@ async fn test_post_update_book() {
         ("current_holder_id", ""),
     ];
 
-    let response = server
-        .post("/books")
-        .form(&form_data)
-        .await;
+    let response = server.post("/books").form(&form_data).await;
 
     response.assert_status_see_other();
 
-    let books = book::Entity::find()
-        .all(&setup.db)
-        .await
-        .unwrap();
+    let books = book::Entity::find().all(&setup.db).await.unwrap();
 
     let new_book = books.iter().find(|b| b.title == "1984").unwrap();
 
     assert_eq!(new_book.authors, "Karl Marx");
 }
-
-
-
-

@@ -33,13 +33,13 @@ impl MigrationTrait for Migration {
                         ForeignKey::create()
                             .name("fk-book-owner_id")
                             .from(Book::Table, Book::OwnerId)
-                            .to(User::Table, User::Id)
+                            .to(User::Table, User::Id),
                     )
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk-book-current_holder_id")
                             .from(Book::Table, Book::CurrentHolderId)
-                            .to(User::Table, User::Id)
+                            .to(User::Table, User::Id),
                     )
                     .to_owned(),
             )
@@ -66,12 +66,12 @@ pub enum Book {
     CurrentHolderId,
     Description,
     OpenLibraryLink,
-    CoverUrl
+    CoverUrl,
 }
 
 #[derive(DeriveIden)]
 enum User {
     Table,
     Id,
-    Name
+    Name,
 }

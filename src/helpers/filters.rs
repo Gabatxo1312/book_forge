@@ -9,5 +9,3 @@ where
         None => String::new(),
     })
 }
-
-

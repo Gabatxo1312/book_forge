@@ -1,10 +1,10 @@
-use std::sync::Arc;
 use book_forge::config::AppState;
+use std::sync::Arc;
 
 use axum_test::TestServer;
 
 use migration::MigratorTrait;
-use sea_orm::{ Database, DatabaseConnection };
+use sea_orm::{Database, DatabaseConnection};
 
 use crate::common::seed_data::TestData;
 
@@ -12,7 +12,7 @@ use crate::common::seed_data::TestData;
 pub struct TestSetup {
     pub db: DatabaseConnection,
     pub test_data: TestData,
-    pub server: TestServer
+    pub server: TestServer,
 }
 
 impl TestSetup {
@@ -36,7 +36,7 @@ impl TestSetup {
         Self {
             db,
             test_data: test_data.unwrap(),
-            server
+            server,
         }
     }
 }

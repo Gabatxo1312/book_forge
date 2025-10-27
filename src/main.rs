@@ -1,10 +1,9 @@
-use book_forge::{ config::AppState, handlers::create_router };
+use book_forge::{config::AppState, handlers::create_router};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
 async fn main() -> Result<(), sea_orm::DbErr> {
-
     let state = AppState::initialize().await?;
 
     rust_i18n::set_locale(state.locale.as_str());

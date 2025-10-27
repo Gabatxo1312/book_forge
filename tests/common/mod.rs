@@ -1,2 +1,2 @@
-pub mod setup_test;
 pub mod seed_data;
+pub mod setup_test;

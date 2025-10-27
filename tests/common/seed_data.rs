@@ -1,6 +1,6 @@
 use entity::{book, user};
+use sea_orm::ActiveModelTrait;
 use sea_orm::{ActiveValue::Set, DatabaseConnection, DbErr};
-use sea_orm::{ ActiveModelTrait };
 
 #[allow(dead_code)]
 pub struct TestData {
@@ -40,12 +40,11 @@ impl TestData {
             ..Default::default()
         };
 
-
         let saved_book1 = book1.insert(db).await?;
 
         Ok(Self {
             books: vec![saved_book1],
-            users: vec![saved_user1, saved_user2, saved_book3]
+            users: vec![saved_user1, saved_user2, saved_book3],
         })
     }
 }
