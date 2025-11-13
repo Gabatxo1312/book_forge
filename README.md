@@ -46,12 +46,7 @@
    database_url="sqlite://db.sqlite?mode=rwc"
    ```
 
-4. **Run migrations**
-   ```bash
-   cargo run --bin migration
-   ```
-
-5. **Start the application**
+4. **Start the application**
    ```bash
    cargo run
    ```
@@ -81,6 +76,8 @@ book_forge/
 cd migration
 cargo run -- generate MIGRATION_NAME
 ```
+
+Note: Migrations run on database initialization (when run `cargo run`)
 
 ### Logging and debugging
 

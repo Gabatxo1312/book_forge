@@ -2,7 +2,7 @@ use book_forge::{config::AppState, handlers::create_router};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), sea_orm::DbErr> {
     let state = AppState::initialize().await?;
 
@@ -21,7 +21,7 @@ async fn main() -> Result<(), sea_orm::DbErr> {
         .init();
 
     // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3001").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:8000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 
     Ok(())

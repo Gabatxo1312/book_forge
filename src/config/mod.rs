@@ -1,5 +1,6 @@
 use std::{env, fs, path::Path, sync::Arc};
 
+use migration::{Migrator, MigratorTrait};
 use serde::Deserialize;
 
 use std::io::Write;
@@ -21,6 +22,7 @@ impl AppState {
         let _ = Self::create_env_file(&config.database_url);
 
         let connection = sea_orm::Database::connect(&config.database_url).await?;
+        Migrator::up(&connection, None).await.unwrap();
 
         Ok(Arc::new(Self {
             db: connection.clone(),
